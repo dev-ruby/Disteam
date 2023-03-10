@@ -12,6 +12,8 @@
 ![Alt text](https://img.shields.io/github/commit-activity/m/dev-ruby/disteam)
  
  Disteam, 디스팀은 SteamAPI를 이용한 여러 기능들을 디스코드에서 사용할 수 있도록 하는 봇입니다.
+ 
+[초대하기](https://discord.com/api/oauth2/authorize?client_id=1074267701461139486&permissions=83968&scope=bot)
 
  
  </br>

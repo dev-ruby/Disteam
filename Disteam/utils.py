@@ -1,9 +1,7 @@
+import discord
 import json
-
 import requests
-
 import re
-
 from typing import Dict, List, Union
 from constants import KEY, URLS
 
@@ -21,6 +19,14 @@ def isUrl(url: str) -> True:
     url_pattern = "^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$"
 
     return not (re.match(url_pattern, url) == None)
+
+
+def getErrorEmbed(desc: str) -> discord.Embed:
+    return discord.Embed(
+                title=":no_entry: Error",
+                description=desc,
+                color=0xFF0000,
+            )
 
 
 def getRecentGames(user_id: str, count: int = 3) -> Union[List[Dict[str, str]], int]:

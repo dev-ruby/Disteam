@@ -1,13 +1,12 @@
 import discord
+import utils
 from discord.ext import commands
 from discord.ext.commands import Context
-import utils
 from constants import TOKEN, EMOJIS
 
 intents = discord.Intents.all()
 
 bot = commands.Bot(command_prefix="$", intents=intents)
-
 
 @bot.event
 async def on_ready():
@@ -23,11 +22,7 @@ async def recentgame(ctx: Context):
     if utils.isUrl(ctx.message.content.split()[1]):
         user_id = utils.getSteamIDbyURL(ctx.message.content.split()[1])
         if user_id == None:
-            embed = discord.Embed(
-                title=":no_entry: Error",
-                description="해당 유저를 찾을 수 없습니다.",
-                color=0xFF0000,
-            )
+            embed = utils.getErrorEmbed("해당 유저를 찾을 수 없습니다.")
             await ctx.send(embed=embed)
             return
     else:
@@ -38,9 +33,7 @@ async def recentgame(ctx: Context):
     result = utils.getUserInfo(user_id)
 
     if result == 0:
-        embed = discord.Embed(
-            title=":no_entry: Error", description="해당 유저를 찾을 수 없습니다.", color=0xFF0000
-        )
+        embed = utils.getErrorEmbed("해당 유저를 찾을 수 없습니다.")
         await ctx.send(embed=embed)
         await loading_message.delete()
         return
@@ -56,11 +49,7 @@ async def recentgame(ctx: Context):
     result = utils.getRecentGames(user_id)
 
     if result == 0:
-        embed = discord.Embed(
-            title=":no_entry: Error",
-            description="최근 게임 목록을 불러올 수 없습니다.",
-            color=discord.Colour.red(),
-        )
+        embed = utils.getErrorEmbed("최근 게임 목록을 불러올 수 없습니다.")
         await ctx.send(embed=embed)
         await loading_message.delete()
         return

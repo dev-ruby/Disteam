@@ -80,4 +80,12 @@ async def recentgame(ctx: Context):
     await loading_message.delete()
 
 
+@bot.command()
+async def ping(ctx: Context):
+    if ctx.author.bot:
+        return
+    
+    await ctx.send(f"{round(bot.latency * 1000)}ms")
+
+
 bot.run(TOKEN)

@@ -73,7 +73,3 @@ def getSteamIDbyURL(profile_url: str) -> Union[int, None]:
         return
 
     return data["response"]["steamid"]
-
-
-# print(getSteamIDbyURL("https://steamcommunity.com/id/devruby"))
-print(isUrl("http://steamcommunity.com/id/devruby"))

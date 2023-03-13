@@ -23,10 +23,10 @@ def isUrl(url: str) -> True:
 
 def getErrorEmbed(desc: str) -> discord.Embed:
     return discord.Embed(
-                title=":no_entry: Error",
-                description=desc,
-                color=0xFF0000,
-            )
+        title=":no_entry: Error",
+        description=desc,
+        color=0xFF0000,
+    )
 
 
 def getRecentGames(user_id: str, count: int = 3) -> Union[List[Dict[str, str]], int]:

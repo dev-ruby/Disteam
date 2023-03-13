@@ -8,6 +8,7 @@ intents = discord.Intents.all()
 
 bot = commands.Bot(command_prefix="$", intents=intents, case_insensitive=True)
 
+
 @bot.event
 async def on_ready():
     game = discord.Game(f"{len(bot.guilds)} 서버 / {len(bot.users)} 유저")

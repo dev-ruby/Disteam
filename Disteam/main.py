@@ -8,20 +8,26 @@ intents = discord.Intents.all()
 
 bot = commands.Bot(command_prefix="$", intents=intents)
 
+
 @bot.event
 async def on_ready():
     game = discord.Game(f"{len(bot.guilds)} 서버 / {len(bot.users)} 유저")
     await bot.change_presence(status=discord.Status.online, activity=game)
 
+
 @bot.command()
 async def recentgame(ctx: Context):
     if ctx.author.bot:
         return
-    
+
     if utils.isUrl(ctx.message.content.split()[1]):
         user_id = utils.getSteamIDbyURL(ctx.message.content.split()[1])
         if user_id == None:
-            embed = discord.Embed(title = ":no_entry: Error", description="해당 유저를 찾을 수 없습니다.", color=0xff0000)
+            embed = discord.Embed(
+                title=":no_entry: Error",
+                description="해당 유저를 찾을 수 없습니다.",
+                color=0xFF0000,
+            )
             await ctx.send(embed=embed)
             return
     else:
@@ -32,7 +38,9 @@ async def recentgame(ctx: Context):
     result = utils.getUserInfo(user_id)
 
     if result == 0:
-        embed = discord.Embed(title = ":no_entry: Error", description="해당 유저를 찾을 수 없습니다.", color=0xff0000)
+        embed = discord.Embed(
+            title=":no_entry: Error", description="해당 유저를 찾을 수 없습니다.", color=0xFF0000
+        )
         await ctx.send(embed=embed)
         await loading_message.delete()
         return
@@ -48,7 +56,11 @@ async def recentgame(ctx: Context):
     result = utils.getRecentGames(user_id)
 
     if result == 0:
-        embed = discord.Embed(title = ":no_entry: Error", description="최근 게임 목록을 불러올 수 없습니다.", color=discord.Colour.red())
+        embed = discord.Embed(
+            title=":no_entry: Error",
+            description="최근 게임 목록을 불러올 수 없습니다.",
+            color=discord.Colour.red(),
+        )
         await ctx.send(embed=embed)
         await loading_message.delete()
         return

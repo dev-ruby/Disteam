@@ -1,56 +1,57 @@
 import discord
+from discord.ext import commands
+from discord.ext.commands import Context
 import utils
 from constants import TOKEN, EMOJIS
 
 intents = discord.Intents.all()
 
-client = discord.Client(intents=intents)
+bot = commands.Bot(command_prefix="$", intents=intents)
 
-
-@client.event
-async def on_message(message: discord.Message):
-    if message.author.bot or not message.content.startswith("$"):
+@bot.command()
+async def recentgame(ctx: Context):
+    if ctx.author.bot:
         return
     
-    messages = message.content[1:].split()
-    command = messages[0].lower()
+    user_id = ctx.message.content.split()[1]
 
-    if command == "recentgame":
-        loading_message = await message.channel.send(f"{EMOJIS.LOADING} Loading...")
-        profile = utils.getUserInfo(messages[1])
+    loading_message = await ctx.send(f"{EMOJIS.LOADING} Loading...")
 
+    profile = utils.getUserInfo(user_id)
+
+    profile_embed = discord.Embed(
+        title=profile["personaname"],
+        description="님의 최근 게임 목록",
+        url="https://steamcommunity.com/profiles/{0}".format(user_id),
+    )
+    profile_embed.set_thumbnail(url=profile["avatarfull"])
+    await ctx.send(embed=profile_embed)
+
+    games = utils.getRecentGames(user_id)
+
+    for game in games:
         embed = discord.Embed(
-            title=profile["personaname"],
-            description="님의 최근 게임 목록",
-            url="https://steamcommunity.com/profiles/{0}".format(messages[1]),
+            title=game["name"],
+            url="https://store.steampowered.com/app/{0}".format(game["appid"]),
         )
-        embed.set_thumbnail(url=profile["avatarfull"])
-        await message.channel.send(embed=embed)
+        embed.set_image(
+            url="https://cdn.cloudflare.steamstatic.com/steam/apps/{0}/header.jpg".format(
+                game["appid"]
+            )
+        )
+        embed.add_field(
+            name="전체 플레이타임",
+            value="{0}시간{1}분".format(*divmod(game["playtime_forever"], 60)),
+            inline=True,
+        )
+        embed.add_field(
+            name="2주 플레이타임",
+            value="{0}시간{1}분".format(*divmod(game["playtime_2weeks"], 60)),
+            inline=True,
+        )
+        await ctx.send(embed=embed)
 
-        games = utils.getRecentGames(messages[1])
-        for game in games:
-            embed = discord.Embed(
-                title=game["name"],
-                url="https://store.steampowered.com/app/{0}".format(game["appid"]),
-            )
-            embed.set_image(
-                url="https://cdn.cloudflare.steamstatic.com/steam/apps/{0}/header.jpg".format(
-                    game["appid"]
-                )
-            )
-            embed.add_field(
-                name="전체 플레이타임",
-                value="{0}시간{1}분".format(*divmod(game["playtime_forever"], 60)),
-                inline=True,
-            )
-            embed.add_field(
-                name="2주 플레이타임",
-                value="{0}시간{1}분".format(*divmod(game["playtime_2weeks"], 60)),
-                inline=True,
-            )
-            await message.channel.send(embed=embed)
-
-        await loading_message.delete()
+    await loading_message.delete()
 
 
-client.run(TOKEN)
+bot.run(TOKEN)

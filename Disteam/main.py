@@ -8,6 +8,11 @@ intents = discord.Intents.all()
 
 bot = commands.Bot(command_prefix="$", intents=intents)
 
+@bot.event
+async def on_ready():
+    game = discord.Game(f"{len(bot.guilds)} 서버 / {len(bot.users)} 유저")
+    await bot.change_presence(status=discord.Status.online, activity=game)
+
 @bot.command()
 async def recentgame(ctx: Context):
     if ctx.author.bot:
@@ -17,19 +22,31 @@ async def recentgame(ctx: Context):
 
     loading_message = await ctx.send(f"{EMOJIS.LOADING} Loading...")
 
-    profile = utils.getUserInfo(user_id)
+    result = utils.getUserInfo(user_id)
+
+    if result == 0:
+        embed = discord.Embed(title = ":no_entry: Error", description="해당 유저를 찾을 수 없습니다.", color=0xff0000)
+        await ctx.send(embed=embed)
+        await loading_message.delete()
+        return
 
     profile_embed = discord.Embed(
-        title=profile["personaname"],
+        title=result["personaname"],
         description="님의 최근 게임 목록",
         url="https://steamcommunity.com/profiles/{0}".format(user_id),
     )
-    profile_embed.set_thumbnail(url=profile["avatarfull"])
+    profile_embed.set_thumbnail(url=result["avatarfull"])
     await ctx.send(embed=profile_embed)
 
-    games = utils.getRecentGames(user_id)
+    result = utils.getRecentGames(user_id)
 
-    for game in games:
+    if result == 0:
+        embed = discord.Embed(title = ":no_entry: Error", description="최근 게임 목록을 불러올 수 없습니다.", color=discord.Colour.red())
+        await ctx.send(embed=embed)
+        await loading_message.delete()
+        return
+
+    for game in result:
         embed = discord.Embed(
             title=game["name"],
             url="https://store.steampowered.com/app/{0}".format(game["appid"]),

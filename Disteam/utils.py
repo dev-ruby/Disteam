@@ -2,7 +2,7 @@ import json
 
 import requests
 
-from typing import Dict, List
+from typing import Dict, List, Union
 from constants import KEY, URLS
 
 
@@ -15,7 +15,7 @@ def makeUrl(url: str, /, **params: Dict[str, str]) -> str:
     return url
 
 
-def getRecentGames(user_id: str, count: int = 3) -> List[Dict[str, str]]:
+def getRecentGames(user_id: str, count: int = 3) -> Union[List[Dict[str, str]], int]:
     url = makeUrl(
         URLS.RECENT_GAME,
         key=KEY,
@@ -24,10 +24,14 @@ def getRecentGames(user_id: str, count: int = 3) -> List[Dict[str, str]]:
     )
     response = requests.get(url)
     data = json.loads(response.text)
+
+    if data["response"].get("games") == None:
+        return 0
+
     return data["response"]["games"]
 
 
-def getUserInfo(user_id: str) -> Dict[str, str]:
+def getUserInfo(user_id: str) -> Union[Dict[str, str], int]:
     url = makeUrl(
         URLS.USER_INFO,
         key=KEY,
@@ -35,4 +39,9 @@ def getUserInfo(user_id: str) -> Dict[str, str]:
     )
     response = requests.get(url)
     data = json.loads(response.text)
+
+    if len(data["response"]["players"]) == 0:
+        return 0
+    
+
     return data["response"]["players"][0]

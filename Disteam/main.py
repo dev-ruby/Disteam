@@ -18,7 +18,14 @@ async def recentgame(ctx: Context):
     if ctx.author.bot:
         return
     
-    user_id = ctx.message.content.split()[1]
+    if utils.isUrl(ctx.message.content.split()[1]):
+        user_id = utils.getSteamIDbyURL(ctx.message.content.split()[1])
+        if user_id == None:
+            embed = discord.Embed(title = ":no_entry: Error", description="해당 유저를 찾을 수 없습니다.", color=0xff0000)
+            await ctx.send(embed=embed)
+            return
+    else:
+        user_id = ctx.message.content.split()[1]
 
     loading_message = await ctx.send(f"{EMOJIS.LOADING} Loading...")
 

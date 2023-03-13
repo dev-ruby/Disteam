@@ -13,10 +13,10 @@ __all__ = (
 
 class SteamApiClient:
 
-    def __init__(self, token: str) -> None:
+    def __init__(self, key: str) -> None:
         self.loop = asyncio.get_event_loop()
-        self.token = token
-        self.requester = SteamApiRequester(self.loop, token=token)
+        self.key = key
+        self.requester = SteamApiRequester(self.loop, key=key)
 
     async def fetch_user(self, user_id: str) -> SteamUser:
         users = await self.requester.get_users([user_id])

@@ -47,13 +47,13 @@ class SteamApiRequester:
         self,
         loop: Optional[asyncio.AbstractEventLoop] = None,
         *,
-        token: str,
+        key: str,
     ) -> None:
         self.loop: asyncio.AbstractEventLoop = asyncio.get_event_loop() if loop is None else loop
         self.lock = asyncio.Lock()
 
         self.__session: Optional[aiohttp.ClientSession] = None
-        self.__token: str = token
+        self.__key: str = key
 
     async def request(
         self,

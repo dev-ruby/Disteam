@@ -81,5 +81,10 @@ class SteamApiRequester:
             await self.__session.close()
 
     def get_users(self, user_ids: List[str]) -> Response[PlayerSummariesPayload]:
-        r = UrlRoute('GET', '/ISteamUser/GetPlayerSummaries/v2/{user_ids}', user_ids=user_ids)
+        r = UrlRoute(
+            'GET',
+            '/ISteamUser/GetPlayerSummaries/v2?steamids={user_ids}&key={key}',
+            user_ids=user_ids,
+            key=self.__key,
+        )
         return self.request(r)

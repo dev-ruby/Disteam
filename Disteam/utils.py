@@ -1,18 +1,16 @@
-import requests
 import json
+
+import requests
 
 from typing import Dict, List
 from constants import KEY, URLS
 
 
 def makeUrl(url: str, /, **params: Dict[str, str]) -> str:
-    query = []
-
-    for key, value in params.items():
-        query.append(f'{key}={value}')
+    query = [f"{key}={value}" for key, value in params.items()]
 
     if query:
-        url += '?%s' % '&'.join(query)
+        url += f"?{'&'.join(query)}" 
 
     return url
 
@@ -24,8 +22,7 @@ def getRecentGames(user_id: str, count: int = 3) -> List[Dict[str, str]]:
         steamid=user_id,
         count=count,
     )
-    response = requests.get(url=url)
-
+    response = requests.get(url)
     data = json.loads(response.text)
     return data["response"]["games"]
 
@@ -36,7 +33,6 @@ def getUserInfo(user_id: str) -> Dict[str, str]:
         key=KEY,
         steamids=str([user_id]),
     )
-    response = requests.get(url=url)
-
+    response = requests.get(url)
     data = json.loads(response.text)
     return data["response"]["players"][0]

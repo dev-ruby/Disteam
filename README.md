@@ -35,4 +35,4 @@ Disteam, 디스팀은 SteamAPI를 이용한 여러 기능들을 디스코드에�
 
 `IPlayerService/GetRecentlyPlayedGames`, `ISteamUser/GetPlayerSummaries` API를 사용합니다.
 
-![Alt text](https://github.com/dev-ruby/Disteam/blob/main/res/RecentGame_Screenshot.png)
+![Alt text](https://github.com/dev-ruby/Disteam/blob/main/preview/RecentGame_Screenshot.png)

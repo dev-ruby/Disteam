@@ -37,3 +37,20 @@ Disteam, 디스팀은 SteamAPI를 이용한 여러 기능들을 디스코드에�
 `IPlayerService/GetRecentlyPlayedGames`, `ISteamUser/GetPlayerSummaries`, `ISteamUser/ResolveVanityURL` API를 사용합니다.
 
 ![Alt text](https://github.com/dev-ruby/Disteam/blob/main/preview/RecentGame_Screenshot.png)
+
+</br>
+</br>
+
+### $Profile `user_id` | `profile_url`
+`user_id` : 스팀 id
+`profile_url` : 프로필 링크
+
+</br>
+</br>
+
+해당 유저에 대한 자세한 정보를 불러옵니다.
+스팀 프로필의 공개 범위에 따라 불러오는 정보가 달라질 수 있습니다.
+
+`IPlayerService/GetOwnedGames`, `ISteamUser/GetPlayerSummaries`, `IPlayerService/GetSteamLevel`,`ISteamUser/ResolveVanityURL` API를 사용합니다.
+
+![Alt text](https://github.com/dev-ruby/Disteam/blob/main/preview/Profile_Screenshot.png)

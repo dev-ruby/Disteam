@@ -74,38 +74,32 @@ def getSteamIDbyURL(profile_url: str) -> Union[int, None]:
 
     return data["response"]["steamid"]
 
+
 def getUserLevel(user_id: str) -> Union[str, int]:
-    url = makeUrl(
-        URLS.USER_LEVEL,
-        key=KEY,
-        steamid=user_id
-    )
+    url = makeUrl(URLS.USER_LEVEL, key=KEY, steamid=user_id)
     response = requests.get(url)
 
     if response.status_code == 500:
-        return 0 #incorrect steam id
+        return 0  # incorrect steam id
 
     data = json.loads(response.text)
 
     if data["response"] == {}:
-        return 1 #private profile
-    
+        return 1  # private profile
+
     return str(data["response"]["player_level"])
 
+
 def getUserOwnedGameCount(user_id: str) -> Union[str, int]:
-    url = makeUrl(
-        URLS.OWNED_GAMES,
-        key=KEY,
-        steamid=user_id
-    )
+    url = makeUrl(URLS.OWNED_GAMES, key=KEY, steamid=user_id)
     response = requests.get(url)
 
     if response.status_code == 500:
-        return 0 #incorrect steam id
+        return 0  # incorrect steam id
 
     data = json.loads(response.text)
 
     if data["response"] == {}:
-        return 1 #private profile
+        return 1  # private profile
 
     return str(data["response"]["game_count"])

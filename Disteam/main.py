@@ -85,7 +85,7 @@ async def recentgame(ctx: Context):
 async def ping(ctx: Context):
     if ctx.author.bot:
         return
-    
+
     await ctx.send(f"{round(bot.latency * 1000)}ms")
 
 
@@ -93,7 +93,7 @@ async def ping(ctx: Context):
 async def profile(ctx: Context):
     if ctx.author.bot:
         return
-    
+
     if utils.isUrl(ctx.message.content.split()[1]):
         user_id = utils.getSteamIDbyURL(ctx.message.content.split()[1])
         if user_id == None:
@@ -129,7 +129,9 @@ async def profile(ctx: Context):
 
     time_created_unixtime = profile.get("timecreated")
     if time_created_unixtime:
-        time_created = datetime.datetime.utcfromtimestamp(time_created_unixtime).strftime("%Y %m %d")
+        time_created = datetime.datetime.utcfromtimestamp(
+            time_created_unixtime
+        ).strftime("%Y %m %d")
         embed.add_field(name="Account Create Time", value=time_created, inline=False)
 
     game_count = utils.getUserOwnedGameCount(user_id)
@@ -143,8 +145,6 @@ async def profile(ctx: Context):
     await loading_message.delete()
 
     await ctx.send(embed=embed)
-
-
 
 
 bot.run(TOKEN)

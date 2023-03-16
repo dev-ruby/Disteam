@@ -36,7 +36,7 @@ Disteam, 디스팀은 SteamAPI를 이용한 여러 기능들을 디스코드에�
 
 `IPlayerService/GetRecentlyPlayedGames`, `ISteamUser/GetPlayerSummaries`, `ISteamUser/ResolveVanityURL` API를 사용합니다.
 
-![Alt text](https://github.com/dev-ruby/Disteam/blob/main/preview/RecentGame_Screenshot.png)
+![Alt text](https://raw.githubusercontent.com/dev-ruby/Disteam/main/preview/RecentGame_Screenshot.png)
 
 </br>
 </br>
@@ -53,4 +53,4 @@ Disteam, 디스팀은 SteamAPI를 이용한 여러 기능들을 디스코드에�
 
 `IPlayerService/GetOwnedGames`, `ISteamUser/GetPlayerSummaries`, `IPlayerService/GetSteamLevel`,`ISteamUser/ResolveVanityURL` API를 사용합니다.
 
-![Alt text](https://github.com/dev-ruby/Disteam/blob/main/preview/Profile_Screenshot.png)
+![Alt text](https://raw.githubusercontent.com/dev-ruby/Disteam/main/preview/Profile_Screenshot.png)

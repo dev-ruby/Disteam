@@ -30,7 +30,7 @@ def getErrorEmbed(desc: str) -> discord.Embed:
     )
 
 
-def getRecentGames(user_id: str, count: int = 3) -> Union[List[Dict[str, str]], int]:
+async def getRecentGames(user_id: str, count: int = 3) -> Union[List[Dict[str, str]], int]:
     url = makeUrl(
         URLS.RECENT_GAME,
         key=KEY,
@@ -46,7 +46,7 @@ def getRecentGames(user_id: str, count: int = 3) -> Union[List[Dict[str, str]], 
     return data["response"]["games"]
 
 
-def getUserInfo(user_id: str) -> Union[Dict[str, str], int]:
+async def getUserInfo(user_id: str) -> Union[Dict[str, str], int]:
     url = makeUrl(
         URLS.USER_INFO,
         key=KEY,
@@ -61,7 +61,7 @@ def getUserInfo(user_id: str) -> Union[Dict[str, str], int]:
     return data["response"]["players"][0]
 
 
-def getSteamIDbyURL(profile_url: str) -> Union[int, None]:
+async def getSteamIDbyURL(profile_url: str) -> Union[int, None]:
     if profile_url.startswith("https://steamcommunity.com/profiles/"):
         return profile_url.split("/")[-1]
 
@@ -76,7 +76,7 @@ def getSteamIDbyURL(profile_url: str) -> Union[int, None]:
     return data["response"]["steamid"]
 
 
-def getUserLevel(user_id: str) -> Union[str, int]:
+async def getUserLevel(user_id: str) -> Union[str, int]:
     url = makeUrl(URLS.USER_LEVEL, key=KEY, steamid=user_id)
     response = requests.get(url)
 
@@ -91,7 +91,7 @@ def getUserLevel(user_id: str) -> Union[str, int]:
     return str(data["response"]["player_level"])
 
 
-def getUserOwnedGameCount(user_id: str) -> Union[str, int]:
+async def getUserOwnedGameCount(user_id: str) -> Union[str, int]:
     url = makeUrl(URLS.OWNED_GAMES, key=KEY, steamid=user_id)
     response = requests.get(url)
 

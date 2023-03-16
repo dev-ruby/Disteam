@@ -22,7 +22,7 @@ async def recentgame(ctx: Context):
         return
 
     if utils.isUrl(ctx.message.content.split()[1]):
-        user_id = utils.getSteamIDbyURL(ctx.message.content.split()[1])
+        user_id = await utils.getSteamIDbyURL(ctx.message.content.split()[1])
         if user_id == None:
             embed = utils.getErrorEmbed("해당 유저를 찾을 수 없습니다.")
             await ctx.send(embed=embed)
@@ -32,7 +32,7 @@ async def recentgame(ctx: Context):
 
     loading_message = await ctx.send(f"{EMOJIS.LOADING} Loading...")
 
-    profile = utils.getUserInfo(user_id)
+    profile = await utils.getUserInfo(user_id)
 
     if profile == 0:
         embed = utils.getErrorEmbed("해당 유저를 찾을 수 없습니다.")
@@ -48,7 +48,7 @@ async def recentgame(ctx: Context):
     embed.set_thumbnail(url=profile["avatarfull"])
     await ctx.send(embed=embed)
 
-    games = utils.getRecentGames(user_id)
+    games = await utils.getRecentGames(user_id)
 
     if games == 0:
         embed = utils.getErrorEmbed("최근 게임 목록을 불러올 수 없습니다.")
@@ -95,7 +95,7 @@ async def profile(ctx: Context):
         return
 
     if utils.isUrl(ctx.message.content.split()[1]):
-        user_id = utils.getSteamIDbyURL(ctx.message.content.split()[1])
+        user_id = await utils.getSteamIDbyURL(ctx.message.content.split()[1])
         if user_id == None:
             embed = utils.getErrorEmbed("해당 유저를 찾을 수 없습니다.")
             await ctx.send(embed=embed)
@@ -105,7 +105,7 @@ async def profile(ctx: Context):
 
     loading_message = await ctx.send(f"{EMOJIS.LOADING} Loading...")
 
-    profile = utils.getUserInfo(user_id)
+    profile = await utils.getUserInfo(user_id)
 
     if profile == 0:
         embed = utils.getErrorEmbed("해당 유저를 찾을 수 없습니다.")
@@ -123,7 +123,7 @@ async def profile(ctx: Context):
     if country:
         embed.add_field(name="Country", value=country, inline=False)
 
-    level = utils.getUserLevel(user_id)
+    level = await utils.getUserLevel(user_id)
     if not (level == 0 or level == 1):
         embed.add_field(name="Level", value=level, inline=False)
 
@@ -134,7 +134,7 @@ async def profile(ctx: Context):
         ).strftime("%Y %m %d")
         embed.add_field(name="Account Create Time", value=time_created, inline=False)
 
-    game_count = utils.getUserOwnedGameCount(user_id)
+    game_count = await utils.getUserOwnedGameCount(user_id)
     if not (game_count == 0 or game_count == 1):
         embed.add_field(name="Game Count", value=game_count, inline=False)
 

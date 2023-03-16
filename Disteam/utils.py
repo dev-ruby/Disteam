@@ -1,8 +1,9 @@
-import discord
 import json
-import requests
 import re
 from typing import Dict, List, Union
+
+import discord
+import requests
 from constants import KEY, URLS
 
 

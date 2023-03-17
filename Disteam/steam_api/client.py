@@ -4,7 +4,7 @@ from typing import List
 
 from .requester import SteamApiRequester
 
-from .user import SteamUser
+from .player import PlayerSummary
 
 __all__ = (
     'SteamApiClient',
@@ -18,21 +18,21 @@ class SteamApiClient:
         self.key = key
         self.requester = SteamApiRequester(self.loop, key=key)
 
-    async def fetch_user(self, user_id: str) -> SteamUser:
-        users = await self.requester.get_users([user_id])
+    async def fetch_player(self, steam_id: str) -> PlayerSummary:
+        users = await self.requester.get_player([steam_id])
         payloads = users['response']['players']
 
         if not payloads:
-            raise Exception(f'User Id {user_id} is not founded.')
+            raise Exception(f'User Id {steam_id} is not founded.')
 
-        return SteamUser(data=payloads[0], requester=self.requester)
+        return PlayerSummary(data=payloads[0], requester=self.requester)
 
-    async def fetch_users(self, user_ids: List[str]) -> List[SteamUser]:
-        users = await self.requester.get_users(user_ids)
+    async def fetch_players(self, steam_ids: List[str]) -> List[PlayerSummary]:
+        users = await self.requester.get_player(steam_ids)
         payloads = users['response']['players']
 
         if not payloads:
             raise Exception('Any user not founded.')
 
-        return [SteamUser(data=payload, requester=self.requester) for payload in payloads]
+        return [PlayerSummary(data=payload, requester=self.requester) for payload in payloads]
 

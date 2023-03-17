@@ -8,7 +8,10 @@ from urllib.parse import quote as _uriquote
 from typing import Any, Dict, ClassVar, Coroutine, Optional, Union, List, TypeVar, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .types.user import RawPlayerSummaries as PlayerSummariesPayload
+    from .types.player import (
+        PlayerSummaryResponse as PlayerSummariesPayload,
+        PlayerRecentGamesResponse as PlayerRecentGamesPayload,
+    )
 
     T = TypeVar('T')
     Response = Coroutine[Any, Any, T]
@@ -80,11 +83,47 @@ class SteamApiRequester:
         if not self.__session.closed:
             await self.__session.close()
 
-    def get_users(self, user_ids: List[str]) -> Response[PlayerSummariesPayload]:
+    def get_player(self, steam_ids: List[str]) -> Response[PlayerSummariesPayload]:
         r = UrlRoute(
             'GET',
-            '/ISteamUser/GetPlayerSummaries/v2?steamids={user_ids}&key={key}',
-            user_ids=user_ids,
+            '/ISteamUser/GetPlayerSummaries/v2?steamids={steam_ids}&key={key}',
+            steam_ids=steam_ids,
+            key=self.__key,
+        )
+        return self.request(r)
+
+    def get_steam_level(self, steam_id: str):
+        r = UrlRoute(
+            'GET',
+            '/IPlayerService/GetSteamLevel/v1/steamdid={steam_id}&key={key}',
+            steam_id=steam_id,
+            key=self.__key,
+        )
+        return self.request(r)
+
+    def get_player_owned_games(
+        self,
+        steam_id: str,
+        include_appinfo: bool = False,
+        include_played_free_games: bool = True,
+    ):
+        r = UrlRoute(
+            'GET',
+            '/IPlayerService/GetOwnedGames/v1/steamid={steam_id}&key={key}'
+            '&include_appinfo={include_appinfo}&include_played_free_games={include_played_free_games}',
+            steam_id=steam_id,
+            include_appinfo=include_appinfo,
+            include_played_free_games=include_played_free_games,
+            key=self.__key,
+        )
+        return self.request(r)
+
+    def get_player_recently_games(self, steam_id: str, count: int) -> Response[PlayerRecentGamesPayload]:
+        r = UrlRoute(
+            'GET',
+            '/IPlayerService/GetRecentlyPlayedGames/v1/steamid={steam_id}&count={count}&key={key}',
+            steam_id=steam_id,
+            count=count,
             key=self.__key,
         )
         return self.request(r)

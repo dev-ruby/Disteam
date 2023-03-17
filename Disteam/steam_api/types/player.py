@@ -17,5 +17,19 @@ class Players(TypedDict):
     players: List[PlayerSummary]
 
 
-class RawPlayerSummaries(TypedDict):
+class RecentGame(TypedDict):
+    appid: str
+    playtime_forever: int
+    playtime_2weeks: int
+
+
+class RecentGames(TypedDict):
+    games: List[RecentGame]
+
+
+class PlayerRecentGamesResponse(TypedDict):
+    response: RecentGames
+
+
+class PlayerSummaryResponse(TypedDict):
     response: Players

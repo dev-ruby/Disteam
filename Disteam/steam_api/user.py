@@ -9,6 +9,10 @@ if TYPE_CHECKING:
     from .types.user import PlayerSummary as PlayerSummaryPayload
     from .requester import SteamApiRequester
 
+__all__ = (
+    'PlayerSummary',
+)
+
 
 class PlayerSummary:
 

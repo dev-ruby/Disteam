@@ -8,10 +8,8 @@ from urllib.parse import quote as _uriquote
 from typing import Any, Dict, ClassVar, Coroutine, Optional, Union, List, TypeVar, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .types.player import (
-        PlayerSummaryResponse as PlayerSummariesPayload,
-        PlayerRecentGamesResponse as PlayerRecentGamesPayload,
-    )
+    from .types.user import PlayerSummaryResponse as PlayerSummariesPayload
+    from .types.player import PlayerRecentGamesResponse as PlayerRecentGamesPayload
 
     T = TypeVar('T')
     Response = Coroutine[Any, Any, T]
@@ -101,7 +99,7 @@ class SteamApiRequester:
         )
         return self.request(r)
 
-    def get_player_owned_games(
+    def get_owned_games(
         self,
         steam_id: str,
         include_appinfo: bool = False,
@@ -118,7 +116,7 @@ class SteamApiRequester:
         )
         return self.request(r)
 
-    def get_player_recently_games(self, steam_id: str, count: int) -> Response[PlayerRecentGamesPayload]:
+    def get_recently_played_games(self, steam_id: str, count: int) -> Response[PlayerRecentGamesPayload]:
         r = UrlRoute(
             'GET',
             '/IPlayerService/GetRecentlyPlayedGames/v1/steamid={steam_id}&count={count}&key={key}',

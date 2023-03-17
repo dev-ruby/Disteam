@@ -4,7 +4,7 @@ from typing import List
 
 from .requester import SteamApiRequester
 
-from .player import PlayerSummary
+from .user import PlayerSummary
 
 __all__ = (
     'SteamApiClient',
@@ -36,3 +36,6 @@ class SteamApiClient:
 
         return [PlayerSummary(data=payload, requester=self.requester) for payload in payloads]
 
+    async def fetch_player_level(self, steam_id: str) -> int:
+        lvl = await self.requester.get_steam_level(steam_id)
+        return int(lvl['response']['player_level'])

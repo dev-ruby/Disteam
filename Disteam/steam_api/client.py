@@ -18,7 +18,7 @@ class SteamApiClient:
         self.key = key
         self.requester = SteamApiRequester(self.loop, key=key)
 
-    async def fetch_player(self, steam_id: str) -> PlayerSummary:
+    async def fetch_player_summary(self, steam_id: str) -> PlayerSummary:
         users = await self.requester.get_player([steam_id])
         payloads = users['response']['players']
 
@@ -27,7 +27,7 @@ class SteamApiClient:
 
         return PlayerSummary(data=payloads[0], requester=self.requester)
 
-    async def fetch_players(self, steam_ids: List[str]) -> List[PlayerSummary]:
+    async def fetch_player_summaries(self, steam_ids: List[str]) -> List[PlayerSummary]:
         users = await self.requester.get_player(steam_ids)
         payloads = users['response']['players']
 

@@ -10,15 +10,13 @@ from steam_profile import SteamProfile
 from steam_user import SteamUser
 
 intents: discord.Intents = discord.Intents.all()
-bot: commands.Bot = commands.Bot(command_prefix="$", intents=intents, case_insensitive=True)
+bot: commands.Bot = commands.Bot(
+    command_prefix="$", intents=intents, case_insensitive=True
+)
 
 
 def get_error_embed(desc: str) -> discord.Embed:
-    return discord.Embed(
-        title=":no_entry: Error",
-        description=desc,
-        color=0xFF0000
-    )
+    return discord.Embed(title=":no_entry: Error", description=desc, color=0xFF0000)
 
 
 @bot.event
@@ -35,9 +33,12 @@ async def recentgame(ctx: Context) -> None:
     ldmsg: discord.Message = await ctx.send(f"{EMOJIS.LOADING} Loading...")
 
     try:
-
         url: URI = URI(ctx.message.content.split()[1])
-        user: SteamUser = await SteamUser.query_user_async(url) if url.is_valid() else SteamUser(url.to_string())
+        user: SteamUser = (
+            await SteamUser.query_user_async(url)
+            if url.is_valid()
+            else SteamUser(url.to_string())
+        )
         if user == None:
             embed = get_error_embed("해당 유저를 찾을 수 없습니다.")
             await ctx.send(embed=embed)
@@ -52,7 +53,7 @@ async def recentgame(ctx: Context) -> None:
         embed: discord.Embed = discord.Embed(
             title=profile.persona_name,
             description="님의 최근 게임 목록",
-            url=user.get_profile_uri()
+            url=user.get_profile_uri(),
         )
         embed.set_thumbnail(url=profile.thumbnail_url)
         await ctx.send(embed=embed)
@@ -69,7 +70,9 @@ async def recentgame(ctx: Context) -> None:
                 url="https://store.steampowered.com/app/{0}".format(game.id),
             )
             embed.set_image(
-                url="https://cdn.cloudflare.steamstatic.com/steam/apps/%s/header.jpg" % (game.id))
+                url="https://cdn.cloudflare.steamstatic.com/steam/apps/%s/header.jpg"
+                % (game.id)
+            )
             embed.add_field(
                 name="전체 플레이타임",
                 value="%s시간%s분" % (game.playtime.h, game.playtime.m),
@@ -77,14 +80,12 @@ async def recentgame(ctx: Context) -> None:
             )
             embed.add_field(
                 name="2주 플레이타임",
-                value="%s시간%s분" % (game.playtime_2weeks.h,
-                                   game.playtime_2weeks.m),
+                value="%s시간%s분" % (game.playtime_2weeks.h, game.playtime_2weeks.m),
                 inline=True,
             )
             await ctx.send(embed=embed)
 
     finally:
-
         await ldmsg.delete()
 
 
@@ -99,14 +100,16 @@ async def ping(ctx: Context) -> None:
 async def profile(ctx: Context) -> None:
     if ctx.author.bot:
         return
-    
+
     ldmsg: discord.Message = await ctx.send(f"{EMOJIS.LOADING} Loading...")
 
     try:
-
         url: URI = URI(ctx.message.content.split()[1])
-        user: SteamUser = await SteamUser.query_user_async(
-            url) if url.is_valid() else SteamUser(url.to_string())
+        user: SteamUser = (
+            await SteamUser.query_user_async(url)
+            if url.is_valid()
+            else SteamUser(url.to_string())
+        )
         if user == None:
             embed = get_error_embed("해당 유저를 찾을 수 없습니다.")
             await ctx.send(embed=embed)
@@ -117,10 +120,10 @@ async def profile(ctx: Context) -> None:
             embed = get_error_embed("프로필을 불러오지 못했습니다.")
             await ctx.send(embed=embed)
             return
-        
+
         embed: discord.Embed = discord.Embed(
             title=profile.persona_name,
-            url="https://steamcommunity.com/profiles/%s"%(user.id)
+            url="https://steamcommunity.com/profiles/%s" % (user.id),
         )
 
         embed.add_field(name="ID", value=user.id, inline=False)
@@ -135,9 +138,11 @@ async def profile(ctx: Context) -> None:
 
         created_time: datetime = profile.created_time
         if created_time != None:
-            embed.add_field(name="Account Create Time",
-                            value=created_time.strftime("%Y %m %d"), 
-                            inline=False)
+            embed.add_field(
+                name="Account Create Time",
+                value=created_time.strftime("%Y %m %d"),
+                inline=False,
+            )
 
         game_count: int = await user.get_owned_game_count_async()
         if game_count != None:
@@ -148,9 +153,8 @@ async def profile(ctx: Context) -> None:
         embed.set_footer(text="스팀 프로필 공개 범위 설정에 따라 결과가 달라질 수 있습니다.")
 
         await ctx.send(embed=embed)
-        
+
     finally:
-        
         await ldmsg.delete()
 
 

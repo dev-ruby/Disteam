@@ -30,7 +30,7 @@ async def recentgame(ctx: Context) -> None:
     if ctx.author.bot:
         return
 
-    ldmsg: discord.Message = await ctx.send(f"{EMOJIS.LOADING} Loading...")
+    loading_message: discord.Message = await ctx.send(f"{EMOJIS.LOADING} Loading...")
 
     try:
         uri: URI = URI(ctx.message.content.split()[1])
@@ -66,7 +66,7 @@ async def recentgame(ctx: Context) -> None:
 
         for game in games:
             embed: discord.Embed = discord.Embed(
-                title=game["name"],
+                title=game.name,
                 url="https://store.steampowered.com/app/{0}".format(game.id),
             )
             embed.set_image(
@@ -86,7 +86,7 @@ async def recentgame(ctx: Context) -> None:
             await ctx.send(embed=embed)
 
     finally:
-        await ldmsg.delete()
+        await loading_message.delete()
 
 
 @bot.command()
@@ -101,15 +101,11 @@ async def profile(ctx: Context) -> None:
     if ctx.author.bot:
         return
 
-    ldmsg: discord.Message = await ctx.send(f"{EMOJIS.LOADING} Loading...")
+    loading_message: discord.Message = await ctx.send(f"{EMOJIS.LOADING} Loading...")
 
     try:
         uri: URI = URI(ctx.message.content.split()[1])
-        user: SteamUser = (
-            await SteamUser.query_user_async(uri)
-            if uri.is_valid()
-            else SteamUser(str(uri))
-        )
+        user: SteamUser = await SteamUser.query_user_async(uri)
         if user == None:
             embed = get_error_embed("해당 유저를 찾을 수 없습니다.")
             await ctx.send(embed=embed)
@@ -121,6 +117,11 @@ async def profile(ctx: Context) -> None:
             await ctx.send(embed=embed)
             return
 
+        level: str = await user.get_level_async()
+        game_count: int = await user.get_owned_game_count_async()
+        country: str = profile.contry_code
+        created_time: datetime = profile.created_time
+
         embed: discord.Embed = discord.Embed(
             title=profile.persona_name,
             url="https://steamcommunity.com/profiles/%s" % (user.id),
@@ -128,15 +129,12 @@ async def profile(ctx: Context) -> None:
 
         embed.add_field(name="ID", value=user.id, inline=False)
 
-        country: str = profile.contry_code
         if country != None:
             embed.add_field(name="Country", value=country, inline=False)
 
-        level: str = await user.get_level_async()
         if level != None:
             embed.add_field(name="Level", value=level, inline=False)
 
-        created_time: datetime = profile.created_time
         if created_time != None:
             embed.add_field(
                 name="Account Create Time",
@@ -144,7 +142,6 @@ async def profile(ctx: Context) -> None:
                 inline=False,
             )
 
-        game_count: int = await user.get_owned_game_count_async()
         if game_count != None:
             embed.add_field(name="Game Count", value=game_count, inline=False)
 
@@ -155,7 +152,7 @@ async def profile(ctx: Context) -> None:
         await ctx.send(embed=embed)
 
     finally:
-        await ldmsg.delete()
+        await loading_message.delete()
 
 
 bot.run(TOKEN)

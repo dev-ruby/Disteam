@@ -22,7 +22,7 @@ def getErrorEmbed(desc: str) -> discord.Embed:
 
 
 @bot.event
-async def on_ready():
+async def on_ready() -> None:
     game = discord.Game(f"{len(bot.guilds)} 서버 / {len(bot.users)} 유저")
     await bot.change_presence(status=discord.Status.online, activity=game)
 
@@ -96,7 +96,7 @@ async def ping(ctx: Context) -> None:
 
 
 @bot.command()
-async def profile(ctx: Context):
+async def profile(ctx: Context) -> None:
     if ctx.author.bot:
         return
     

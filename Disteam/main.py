@@ -13,7 +13,7 @@ intents: discord.Intents = discord.Intents.all()
 bot: commands.Bot = commands.Bot(command_prefix="$", intents=intents, case_insensitive=True)
 
 
-def getErrorEmbed(desc: str) -> discord.Embed:
+def get_error_embed(desc: str) -> discord.Embed:
     return discord.Embed(
         title=":no_entry: Error",
         description=desc,
@@ -39,13 +39,13 @@ async def recentgame(ctx: Context) -> None:
         url: URI = URI(ctx.message.content.split()[1])
         user: SteamUser = await SteamUser.query_user_async(url) if url.is_valid() else SteamUser(url.to_string())
         if user == None:
-            embed = getErrorEmbed("해당 유저를 찾을 수 없습니다.")
+            embed = get_error_embed("해당 유저를 찾을 수 없습니다.")
             await ctx.send(embed=embed)
             return
 
         profile: SteamProfile = await user.get_profile_async()
         if profile == None:
-            embed = getErrorEmbed("프로필을 불러오지 못했습니다.")
+            embed = get_error_embed("프로필을 불러오지 못했습니다.")
             await ctx.send(embed=embed)
             return
 
@@ -59,7 +59,7 @@ async def recentgame(ctx: Context) -> None:
 
         games: list[SteamGame] = await user.get_recent_games_async()
         if games == None:
-            embed: discord.Embed = getErrorEmbed("최근 게임 목록을 불러올 수 없습니다.")
+            embed: discord.Embed = get_error_embed("최근 게임 목록을 불러올 수 없습니다.")
             await ctx.send(embed=embed)
             return
 
@@ -108,13 +108,13 @@ async def profile(ctx: Context) -> None:
         user: SteamUser = await SteamUser.query_user_async(
             url) if url.is_valid() else SteamUser(url.to_string())
         if user == None:
-            embed = getErrorEmbed("해당 유저를 찾을 수 없습니다.")
+            embed = get_error_embed("해당 유저를 찾을 수 없습니다.")
             await ctx.send(embed=embed)
             return
 
         profile: SteamProfile = await user.get_profile_async()
         if profile == None:
-            embed = getErrorEmbed("프로필을 불러오지 못했습니다.")
+            embed = get_error_embed("프로필을 불러오지 못했습니다.")
             await ctx.send(embed=embed)
             return
         

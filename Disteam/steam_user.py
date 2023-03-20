@@ -1,12 +1,12 @@
 import json
 import re
-import requests
 from constants import KEY, URLS
 from typing import Union
 
-from uri import URI
+import requests_async
 from steam_game import SteamGame
 from steam_profile import SteamProfile
+from uri import URI
 
 class SteamUser:
     pass
@@ -16,7 +16,7 @@ class SteamUser:
     __api_key: str
     
     @staticmethod
-    def query_user(uri: URI) -> Union[SteamUser,None]:
+    async def query_user_async(uri: URI) -> Union[SteamUser,None]:
         __user_id: str | None
         __api_key: str = KEY
         
@@ -29,7 +29,7 @@ class SteamUser:
                 "key": __api_key,
                 "vanityurl": url.split('/')[-1]
             })
-            res = requests.get(req)
+            res: str = await requests_async.get(req)
             dat = json.loads(res.text)
             __user_id = None if dat["response"]["success"] == 42 else dat["response"]["steamid"]
     
@@ -46,12 +46,12 @@ class SteamUser:
     def get_profile_uri(self) -> URI:
         return URI("https://steamcommunity.com/profiles/%s"%(self.__user_id));
     
-    def get_profile(self) -> SteamProfile | None:
+    async def get_profile_async(self) -> SteamProfile | None:
         req: URI = URI(URLS.USER_INFO, {
             "key": self.__api_key,
             "steamids": self.__user_id
         })
-        res = requests.get(req.to_string())
+        res: str = await requests_async.get(req.to_string())
         dat = json.loads(res.text)
         
         if len(dat["response"]["players"]) == 0:
@@ -59,12 +59,12 @@ class SteamUser:
         
         return SteamProfile(dat["response"]["players"][0])
     
-    def get_level(self) -> str | None:
+    async def get_level_async(self) -> str | None:
         req: URI = URI(URLS.USER_LEVEL, {
             "key": self.__api_key,
             "steamid": self.__user_id
         })
-        res = requests.get(req.to_string())
+        res: str = await requests_async.get(req.to_string())
         if res.status_code == 500: # invalid response code
             return None
         
@@ -74,12 +74,12 @@ class SteamUser:
         
         return str(dat["response"]["player_level"])
     
-    def get_owned_game_count(self) -> int | None:
+    async def get_owned_game_count_async(self) -> int | None:
         req: URI = URI(URLS.OWNED_GAMES, {
             "key": self.__api_key,
             "steamid": self.__user_id
         })
-        res = requests.get(req.to_string())
+        res: str = await requests_async.get(req.to_string())
         if res.status_code == 500: # invalid response code
             return None
         
@@ -89,13 +89,13 @@ class SteamUser:
         
         return int(dat["response"]["game_count"])
         
-    def get_recent_games(self, count: int | None = 3) -> list[SteamGame]:
+    async def get_recent_games_async(self, count: int | None = 3) -> list[SteamGame]:
         req: URI = URI(URLS.RECENT_GAME, {
             "key": self.__api_key,
             "steamid": self.__user_id,
             "count": count
         })
-        res: str = requests.get(req.to_string())
+        res: str = await requests_async.get(req.to_string())
         dat: any = json.loads(res)
         
         games: list[SteamGame] = list()

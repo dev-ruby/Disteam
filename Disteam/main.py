@@ -1,6 +1,6 @@
-import datetime
 import discord
 from constants import EMOJIS, TOKEN
+from datetime import datetime
 from discord.ext import commands
 from discord.ext.commands import Context
 
@@ -9,9 +9,8 @@ from steam_game import SteamGame
 from steam_profile import SteamProfile
 from steam_user import SteamUser
 
-intents = discord.Intents.all()
-
-bot = commands.Bot(command_prefix="$", intents=intents, case_insensitive=True)
+intents: discord.Intents = discord.Intents.all()
+bot: commands.Bot = commands.Bot(command_prefix="$", intents=intents, case_insensitive=True)
 
 
 def getErrorEmbed(desc: str) -> discord.Embed:
@@ -33,19 +32,18 @@ async def recentgame(ctx: Context) -> None:
     if ctx.author.bot:
         return
 
-    ldmsg = await ctx.send(f"{EMOJIS.LOADING} Loading...")
+    ldmsg: discord.Message = await ctx.send(f"{EMOJIS.LOADING} Loading...")
 
     try:
 
         url: URI = URI(ctx.message.content.split()[1])
-        user: SteamUser = SteamUser.query_user(
-            url) if url.is_valid() else SteamUser(url.to_string())
+        user: SteamUser = await SteamUser.query_user_async(url) if url.is_valid() else SteamUser(url.to_string())
         if user == None:
             embed = getErrorEmbed("해당 유저를 찾을 수 없습니다.")
             await ctx.send(embed=embed)
             return
 
-        profile: SteamProfile = user.get_profile()
+        profile: SteamProfile = await user.get_profile_async()
         if profile == None:
             embed = getErrorEmbed("프로필을 불러오지 못했습니다.")
             await ctx.send(embed=embed)
@@ -59,9 +57,9 @@ async def recentgame(ctx: Context) -> None:
         embed.set_thumbnail(url=profile.thumbnail_url)
         await ctx.send(embed=embed)
 
-        games: list[SteamGame] = user.get_recent_games()
+        games: list[SteamGame] = await user.get_recent_games_async()
         if games == None:
-            embed = getErrorEmbed("최근 게임 목록을 불러올 수 없습니다.")
+            embed: discord.Embed = getErrorEmbed("최근 게임 목록을 불러올 수 없습니다.")
             await ctx.send(embed=embed)
             return
 
@@ -102,19 +100,19 @@ async def profile(ctx: Context):
     if ctx.author.bot:
         return
     
-    ldmsg = await ctx.send(f"{EMOJIS.LOADING} Loading...")
+    ldmsg: discord.Message = await ctx.send(f"{EMOJIS.LOADING} Loading...")
 
     try:
 
         url: URI = URI(ctx.message.content.split()[1])
-        user: SteamUser = SteamUser.query_user(
+        user: SteamUser = await SteamUser.query_user_async(
             url) if url.is_valid() else SteamUser(url.to_string())
         if user == None:
             embed = getErrorEmbed("해당 유저를 찾을 수 없습니다.")
             await ctx.send(embed=embed)
             return
 
-        profile: SteamProfile = user.get_profile()
+        profile: SteamProfile = await user.get_profile_async()
         if profile == None:
             embed = getErrorEmbed("프로필을 불러오지 못했습니다.")
             await ctx.send(embed=embed)
@@ -131,17 +129,17 @@ async def profile(ctx: Context):
         if country != None:
             embed.add_field(name="Country", value=country, inline=False)
 
-        level = user.get_level()
+        level: str = await user.get_level_async()
         if level != None:
             embed.add_field(name="Level", value=level, inline=False)
 
-        created_time = profile.created_time
+        created_time: datetime = profile.created_time
         if created_time != None:
             embed.add_field(name="Account Create Time",
                             value=created_time.strftime("%Y %m %d"), 
                             inline=False)
 
-        game_count = user.get_owned_game_count()
+        game_count: int = await user.get_owned_game_count_async()
         if game_count != None:
             embed.add_field(name="Game Count", value=game_count, inline=False)
 

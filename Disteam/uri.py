@@ -17,5 +17,5 @@ class URI:
         regex: str = "/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/"
         return re.match(regex, URI) != None
 
-    def to_string(self) -> str:
+    def __str__(self) -> str:
         return self.__uri

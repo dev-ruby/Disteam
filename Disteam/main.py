@@ -37,7 +37,7 @@ async def recentgame(ctx: Context) -> None:
         user: SteamUser = (
             await SteamUser.query_user_async(uri)
             if uri.is_valid()
-            else SteamUser(uri.to_string())
+            else SteamUser(str(uri))
         )
         if user == None:
             embed = get_error_embed("해당 유저를 찾을 수 없습니다.")
@@ -108,7 +108,7 @@ async def profile(ctx: Context) -> None:
         user: SteamUser = (
             await SteamUser.query_user_async(uri)
             if uri.is_valid()
-            else SteamUser(uri.to_string())
+            else SteamUser(str(uri))
         )
         if user == None:
             embed = get_error_embed("해당 유저를 찾을 수 없습니다.")

@@ -33,11 +33,11 @@ async def recentgame(ctx: Context) -> None:
     ldmsg: discord.Message = await ctx.send(f"{EMOJIS.LOADING} Loading...")
 
     try:
-        url: URI = URI(ctx.message.content.split()[1])
+        uri: URI = URI(ctx.message.content.split()[1])
         user: SteamUser = (
-            await SteamUser.query_user_async(url)
-            if url.is_valid()
-            else SteamUser(url.to_string())
+            await SteamUser.query_user_async(uri)
+            if uri.is_valid()
+            else SteamUser(uri.to_string())
         )
         if user == None:
             embed = get_error_embed("해당 유저를 찾을 수 없습니다.")
@@ -104,11 +104,11 @@ async def profile(ctx: Context) -> None:
     ldmsg: discord.Message = await ctx.send(f"{EMOJIS.LOADING} Loading...")
 
     try:
-        url: URI = URI(ctx.message.content.split()[1])
+        uri: URI = URI(ctx.message.content.split()[1])
         user: SteamUser = (
-            await SteamUser.query_user_async(url)
-            if url.is_valid()
-            else SteamUser(url.to_string())
+            await SteamUser.query_user_async(uri)
+            if uri.is_valid()
+            else SteamUser(uri.to_string())
         )
         if user == None:
             embed = get_error_embed("해당 유저를 찾을 수 없습니다.")

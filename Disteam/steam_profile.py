@@ -1,12 +1,12 @@
 from datetime import datetime
-
+from typing import Union
 from uri import URI
 
 
 class SteamProfile:
     __persona_name: str
-    __contry_code: str | None
-    __created_time: datetime | None
+    __contry_code: Union[str, None]
+    __created_time: Union[datetime, None]
     __thumbnail_url: URI
 
     def __init__(self, dat: dict[str, str]) -> None:
@@ -25,11 +25,11 @@ class SteamProfile:
         return self.__persona_name
 
     @property
-    def contry_code(self) -> str | None:
+    def contry_code(self) -> Union[str, None]:
         return self.__contry_code
 
     @property
-    def created_time(self) -> datetime | None:
+    def created_time(self) -> Union[datetime, None]:
         return self.__created_time
 
     @property

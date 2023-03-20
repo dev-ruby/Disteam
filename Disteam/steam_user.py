@@ -19,7 +19,7 @@ class SteamUser:
 
     @staticmethod
     async def query_user_async(uri: URI) -> Union[SteamUser, None]:
-        __user_id: str | None
+        __user_id: Union[str, None]
         __api_key: str = KEY
 
         url: str = uri.to_string()
@@ -49,7 +49,7 @@ class SteamUser:
     def get_profile_uri(self) -> URI:
         return URI("https://steamcommunity.com/profiles/%s" % (self.__user_id))
 
-    async def get_profile_async(self) -> SteamProfile | None:
+    async def get_profile_async(self) -> Union[SteamProfile, None]:
         req: URI = URI(
             URLS.USER_INFO, {"key": self.__api_key, "steamids": self.__user_id}
         )
@@ -61,7 +61,7 @@ class SteamUser:
 
         return SteamProfile(dat["response"]["players"][0])
 
-    async def get_level_async(self) -> str | None:
+    async def get_level_async(self) -> Union[str, None]:
         req: URI = URI(
             URLS.USER_LEVEL, {"key": self.__api_key, "steamid": self.__user_id}
         )
@@ -75,7 +75,7 @@ class SteamUser:
 
         return str(dat["response"]["player_level"])
 
-    async def get_owned_game_count_async(self) -> int | None:
+    async def get_owned_game_count_async(self) -> Union[int, None]:
         req: URI = URI(
             URLS.OWNED_GAMES, {"key": self.__api_key, "steamid": self.__user_id}
         )
@@ -89,7 +89,7 @@ class SteamUser:
 
         return int(dat["response"]["game_count"])
 
-    async def get_recent_games_async(self, count: int | None = 3) -> list[SteamGame]:
+    async def get_recent_games_async(self, count: Union[int, None] = 3) -> list[SteamGame]:
         req: URI = URI(
             URLS.RECENT_GAME,
             {"key": self.__api_key, "steamid": self.__user_id, "count": count},

@@ -1,56 +1,93 @@
-<div align="center">
+# DISTEAM-ALT
 
-# Disteam
+![Alt text](https://img.shields.io/github/languages/code-size/Sharp0802/Disteam)
+![Alt text](https://img.shields.io/github/directory-file-count/Sharp0802/Disteam)
+![Alt text](https://img.shields.io/tokei/lines/github/Sharp0802/disteam)
+![Alt text](https://img.shields.io/github/issues/Sharp0802/disteam)
+![Alt text](https://img.shields.io/github/commit-activity/m/Sharp0802/disteam)
+
+## SUMMARY
+
+`Disteam`: 
+A discord bot that provides you ways to access Steam API in discord, 
+written in python3,
+for cross-platform.
+
+`Disteam-Alt`:
+A fork of `Disteam` that improve the readability of source code and make source code more object-driven.
+
+## GOAL
+
+- Improve the readablity of original source code
+- Make more object-driven
+- Optimize performance
+
+## SYNOPSIS
+
+### Get the 3 most-recently-played games of specific user
+
+<pre>
+$RecentGame [<i>USER-ID</i> | <i>PROFILE-URL</i>]
+</pre>
+
+### Get the profile info of specific user
+
+<pre>
+$Profile [<i>USER-ID</i> | <i>PROFILE-URL</i>]
+</pre>
+
+## DESCRIPTION
+
+> Basically, The usage and internal method is same as original project.
+>
+> Only difference is that this is refactored version of original source.
+
+### `$RecentGame` command
+
+The `$RecentGame` command retrieves the 3 most-recently-played games of specific user.
+User can be specified by `USER-ID` parameter or `PROFILE-URL` parameter.
+
+```
+$RecentGame 76561199057515902
+```
+
+Callee(`Disteam` host) will detect whether that parameter is `USER-ID` or `PROFILE-URL` via determine if parameter is valid URL.
+For example, `76561199057515902` is invalid URL.
+Thus, Callee will consider parameter as `USER-ID`.
+Otherwise, Callee will query `USER-ID` with sending GET request to url.
+
+Callee will use steam API: 
+- `IPlayerService/GetRecentlyPlayedGames`
+- `ISteamUser/GetPlayerSummaries`
+- `ISteamUser/ResolveVanityURL`
+
+### `$Profile` command
+
+The `$Profile` command will show you the profile info of specific user.
+User can be specified by `USER-ID` parameter or `PROFILE-URL` parameter.
+
+```
+$Profile 76561199057515902
+```
+
+Callee(`Disteam` host) will detect whether that parameter is `USER-ID` or `PROFILE-URL` via determine if parameter is valid URL.
+For example, `76561199057515902` is invalid URL.
+Thus, Callee will consider parameter as `USER-ID`.
+Otherwise, Callee will query `USER-ID` with sending GET request to url.
+
+Callee will use steam API: 
+- `IPlayerService/GetOwnedGames`
+- `ISteamUser/GetPlayerSummaries`
+- `IPlayerService/GetSteamLevel`
+- `ISteamUser/ResolveVanityURL`
 
 
-![Alt text](https://img.shields.io/github/languages/code-size/dev-ruby/Disteam)
-![Alt text](https://img.shields.io/github/directory-file-count/dev-ruby/Disteam)
-![Alt text](https://img.shields.io/tokei/lines/github/dev-ruby/disteam)
+## PREVIEW
 
-
-![Alt text](https://img.shields.io/github/issues/dev-ruby/disteam)
-![Alt text](https://img.shields.io/github/commit-activity/m/dev-ruby/disteam)
-
-Disteam, 디스팀은 SteamAPI를 이용한 여러 기능들을 디스코드에서 사용할 수 있도록 하는 봇입니다.
-
-[초대하기](https://discord.com/api/oauth2/authorize?client_id=1074267701461139486&permissions=83968&scope=bot)
-
-
-</br>
-</br>
-</br>
-</br>
-</br>
-
-
-## 명령어
-
-### $RecentGame `user_id` | `profile_url`
-`user_id` : 스팀 id
-`profile_url` : 프로필 링크
-
-</br>
-</br>
-
-해당 유저가 최근 플레이한 게임 3개의 정보를 불러옵니다.
-
-`IPlayerService/GetRecentlyPlayedGames`, `ISteamUser/GetPlayerSummaries`, `ISteamUser/ResolveVanityURL` API를 사용합니다.
+### View recent 3 games
 
 ![Alt text](https://raw.githubusercontent.com/dev-ruby/Disteam/main/preview/RecentGame_Screenshot.png)
 
-</br>
-</br>
-
-### $Profile `user_id` | `profile_url`
-`user_id` : 스팀 id
-`profile_url` : 프로필 링크
-
-</br>
-</br>
-
-해당 유저에 대한 자세한 정보를 불러옵니다.
-스팀 프로필의 공개 범위에 따라 불러오는 정보가 달라질 수 있습니다.
-
-`IPlayerService/GetOwnedGames`, `ISteamUser/GetPlayerSummaries`, `IPlayerService/GetSteamLevel`,`ISteamUser/ResolveVanityURL` API를 사용합니다.
+### View profile info
 
 ![Alt text](https://raw.githubusercontent.com/dev-ruby/Disteam/main/preview/Profile_Screenshot.png)

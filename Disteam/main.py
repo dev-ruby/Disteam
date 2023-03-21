@@ -1,13 +1,14 @@
-import discord
-from constants import EMOJIS, TOKEN
 from datetime import datetime
+
+import discord
 from discord.ext import commands
 from discord.ext.commands import Context
 
-from uri import URI
+from constants import EMOJIS, TOKEN
 from steam_game import SteamGame
 from steam_profile import SteamProfile
 from steam_user import SteamUser
+from uri import URI
 
 intents: discord.Intents = discord.Intents.all()
 bot: commands.Bot = commands.Bot(

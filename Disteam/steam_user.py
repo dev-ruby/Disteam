@@ -1,10 +1,11 @@
 import json
 import re
-from constants import KEY, URLS
 from typing import Tuple, Union
 
 from aiohttp import ClientResponse
+
 import requests_async
+from constants import KEY, URLS
 from steam_game import SteamGame
 from steam_profile import SteamProfile
 from uri import URI

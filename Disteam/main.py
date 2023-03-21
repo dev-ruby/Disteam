@@ -34,11 +34,7 @@ async def recentgame(ctx: Context) -> None:
 
     try:
         uri: URI = URI(ctx.message.content.split()[1])
-        user: SteamUser = (
-            await SteamUser.query_user_async(uri)
-            if uri.is_valid()
-            else SteamUser(str(uri))
-        )
+        user: SteamUser = await SteamUser.query_user_async(uri)
         if user == None:
             embed = get_error_embed("해당 유저를 찾을 수 없습니다.")
             await ctx.send(embed=embed)

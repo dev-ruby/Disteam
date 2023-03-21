@@ -36,7 +36,7 @@ class SteamUser:
             req: URI = URI(
                 URLS.CUSTOM_URL, {"key": __api_key, "vanityurl": url.split("/")[-1]}
             )
-            res: Tuple[str, int] = await requests_async.get(str(req))
+            res: Tuple[str, int] = await requests_async.get(req)
             dat = json.loads(res[0])
             __user_id = (
                 None if dat["response"]["success"] == 42 else dat["response"]["steamid"]
@@ -59,7 +59,7 @@ class SteamUser:
         req: URI = URI(
             URLS.USER_INFO, {"key": self.__api_key, "steamids": self.__user_id}
         )
-        res: Tuple[str, int] = await requests_async.get(str(req))
+        res: Tuple[str, int] = await requests_async.get(req)
         dat = json.loads(res[0])
 
         if len(dat["response"]["players"]) == 0:
@@ -71,7 +71,7 @@ class SteamUser:
         req: URI = URI(
             URLS.USER_LEVEL, {"key": self.__api_key, "steamid": self.__user_id}
         )
-        res: Tuple[str, int] = await requests_async.get(str(req))
+        res: Tuple[str, int] = await requests_async.get(req)
         if res[1] == 500:
             return None
 
@@ -85,7 +85,7 @@ class SteamUser:
         req: URI = URI(
             URLS.OWNED_GAMES, {"key": self.__api_key, "steamid": self.__user_id}
         )
-        res: Tuple[str, int] = await requests_async.get(str(req))
+        res: Tuple[str, int] = await requests_async.get(req)
         if res[1] == 500:
             return None
 
@@ -102,7 +102,7 @@ class SteamUser:
             URLS.RECENT_GAME,
             {"key": self.__api_key, "steamid": self.__user_id, "count": count},
         )
-        res: Tuple[str, int] = await requests_async.get(str(req))
+        res: Tuple[str, int] = await requests_async.get(req)
         dat = json.loads(res[0])
 
         games: list[SteamGame] = list()

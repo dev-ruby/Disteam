@@ -1,10 +1,11 @@
 import re
+from typing import Optional
 
 
 class URI:
     __uri: str
 
-    def __init__(self, url: str, args: dict[str, str] | None = None) -> None:
+    def __init__(self, url: str, args: Optional[dict[str, str]] = None) -> None:
         if args:
             first: bool = True
             for key, val in args.items():
